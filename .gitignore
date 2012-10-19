@@ -1,0 +1,10 @@
+~*
+*~
+*.back
+*.~
+~back
+bin
+test
+data
+*.o
+*.gch
