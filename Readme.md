@@ -4,8 +4,6 @@
 
 Every binary output comes out into bin/ folder and the data comes out to be data/ folder.
 
-For this version, you can only use "sampler" application to generate the samples.
-
 Use of the "sampler" app :
 
 	./sampler [output_file] [vertices_N] [start_weight] [weight]
@@ -21,6 +19,9 @@ The sample output of "output_file" should be formatted like :
 	...
 	[edge#N]
 
+Or use `make sample` to automatically generate the sample for test later on. It uses
+scripts inside scripts folder.
+
 ## Pseudocode ##
 
 Pseudocode for this single & parallel dijkstra :
@@ -32,6 +33,13 @@ Pseudocode for this single & parallel dijkstra :
 
 ### Dijkstra Single Search Path (Parallel GPU) ###
 
+
+## Test samples ##
+
+The samples generated automatically and randomly. The generated function to generate
+the sample :
+
+	
 
 
 References : need to be added soon

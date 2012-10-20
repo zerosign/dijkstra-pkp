@@ -25,6 +25,8 @@ namespace g {
 		}
 	};
 
+	typedef std::pair<vertex_t, weight_t> edge;
+
 	typedef std::map<vertex_t, weight_t> edges;
 	typedef std::map<vertex_t, vertex_t> relations;
 	typedef std::list<vertex_t> path;

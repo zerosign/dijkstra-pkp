@@ -4,21 +4,17 @@
 #include <vector>
 
 namespace g {
-
 	
 	// define the MAX WEIGHT
 	const int MAX_WEIGHT = 
 		std::numeric_limits<float>::max();
 
-
-
 	void to_string(path& results,
 				std::string& str_out) {
 		for(auto &p : results) {
-			std::printf("%d ", p);
+			str_out.append(p + " ");
 		}
 	}
-	
 
 };
 

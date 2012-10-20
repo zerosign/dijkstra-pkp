@@ -44,10 +44,11 @@ int main(int argc, char ** argv) {
 
 	dijkstra_sp_cpu_result(source, previous, result);
 
-	//std::string result_str;
+	std::string result_str;
 	
-	//g::to_string(result, result_str);
-	//std::printf("\n\n[RESULT]\n\n%s\n\n", result_str.c_str());
+	g::to_string(result, result_str);
+	
+	std::printf("\n\n[RESULT]\n\n%s\n\n", result_str.c_str());
 	/**/
 	return 0;
 }
@@ -61,9 +62,12 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 
 	std::printf("Sizeof Graph : %ld\n", graph.size());
 
+
+	// init the the distances edges
 	for(auto& it : graph) {
 		g::vertex_t v = it.first;
 		distances[v] = g::MAX_WEIGHT; // init as max value
+		
 		for(auto& n : it.second) {
 			g::vertex_t v_target = n.target;
 			distances[v_target] = g::MAX_WEIGHT; 
@@ -74,10 +78,14 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 		}
 	}
 	
-	
 	distances[source] = 0; // init the distance from source
 							 // to source XD
-	
+							 
+	for(auto &e : distances) {
+		std::printf("From source [%d], to target [%d], weight : %f\n", 
+				source, e.first, e.second);
+	}
+
 	// at last I found the damn collection that fit
 	std::set<std::pair<g::weight_t, g::vertex_t>> queue;
 	
@@ -100,11 +108,14 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 		for(auto& n : neighbors) {
 			g::vertex_t v_end = n.target;
 			g::weight_t w_end = n.weight;
+
+			std::printf("From source [%d], to target [%d], weight : %f\n", 
+				v_begin, v_end, w_end);
+
 			g::weight_t distance = distances[v_begin] + w_end;
 			
 			std::printf("Distance : %f, From Here : %f\n",
 					distance, distances[v_end]);
-
 
 			if(distance < distances[v_end]) {
 				queue.erase(std::make_pair(distances[v_end], v_end));

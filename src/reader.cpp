@@ -20,15 +20,7 @@ namespace io {
 		
 		std::sscanf(buffer, "%d\t%d\n", &num_vertices,
 				&num_edges);
-		/**
-		input.seekg(0, std::ios::end);
-		long length = input.tellg();
-		input.seekg(0, std::ios::beg);
-		char buffer[length];
-		input.read(buffer, length);
-		std::istringstream sstream(std::string(buffer));
-		
-		**/
+
 	
 		std::printf("V : %d, E : %d\n", num_vertices, num_edges);
 
@@ -46,6 +38,7 @@ namespace io {
 					&end, &weight);
 
 			adjmap[start].push_back(g::neighbor(end, weight));
+			adjmap[end].push_back(g::neighbor(start, weight));
 		}
 
 	
