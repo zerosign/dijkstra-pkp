@@ -5,6 +5,8 @@ SAMPLES_FOLDER = './samples'
 SCRIPTS_FOLDER = './scripts'
 CXXFLAGS = -std=c++11
 
+all : sampler single_dijkstra_adjmap
+	
 firsttime :
 	mkdir -p $(SRC_FOLDER)
 	mkdir -p $(OBJ_FOLDER)
@@ -26,8 +28,7 @@ single_dijkstra_adjmap : firsttime defs.o reader.o
 	#nvcc parallel_dijkstra.cu -o parallel_dijkstra -Wall
 	#g++ single_dijkstra_adjmat.cpp -o single_dijkstra_adjmat -Wall -g -O0
 
-all : sampler single_dijkstra_adjmap
-	
+
 sample : sampler
 	#$((`for ii in {1..200}; do touch $(SAMPLES_FOLDER)/sample_${ii}.data ${ii} 0 100;  done`))
 	#$((`echo Helloworld`)
@@ -37,4 +38,4 @@ test : firsttime sample single_dijkstra_adjmap
 	exec $(SCRIPTS_FOLDER)/script.sh $(BIN_FOLDER)/singlpe_dijkstra_adjmap test $(OUT_FOLDER)
 
 clean : 
-	rm -rf $(OBJ_FOLDER) $(BIN_FOLDER)
+	rm -rf $(OBJ_FOLDER) $(BIN_FOLDER) $(SAMPLES_FOLDER) 

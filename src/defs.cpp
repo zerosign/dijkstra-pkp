@@ -14,7 +14,9 @@ namespace g {
 
 	void to_string(path& results,
 				std::string& str_out) {
-
+		for(auto &p : results) {
+			std::printf("%d ", p);
+		}
 	}
 	
 
