@@ -42,13 +42,12 @@ int main(int argc, char ** argv) {
 	dijkstra_sp_cpu(source, target, graph, 
 		distances, previous);
 
-
 	dijkstra_sp_cpu_result(source, previous, result);
 
-	std::string result_str;
+	//std::string result_str;
 	
-	g::to_string(result, result_str);
-	std::printf("\n\n[RESULT]\n\n%s\n\n", result_str.c_str());
+	//g::to_string(result, result_str);
+	//std::printf("\n\n[RESULT]\n\n%s\n\n", result_str.c_str());
 	/**/
 	return 0;
 }
@@ -56,18 +55,22 @@ int main(int argc, char ** argv) {
 
 void dijkstra_sp_cpu(g::vertex_t& source, 
 		g::vertex_t& target,
-		const g::adjmap& adjmap, 
+		const g::adjmap& graph, 
 		g::edges &distances,
 		g::relations &previous) {
 
-	
-	for(auto& it : adjmap) {
+	std::printf("Sizeof Graph : %ld\n", graph.size());
+
+	for(auto& it : graph) {
 		g::vertex_t v = it.first;
 		distances[v] = g::MAX_WEIGHT; // init as max value
 		for(auto& n : it.second) {
 			g::vertex_t v_target = n.target;
 			distances[v_target] = g::MAX_WEIGHT; 
-			std::printf("Target : %d\n", v_target);
+
+			std::printf("V_BEGIN : %d, V_END : %d, D : %f\n", v,
+				v_target, distances[v_target]);
+			//std::printf("Target : %d\n", v_target);
 		}
 	}
 	
@@ -77,7 +80,8 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 	
 	// at last I found the damn collection that fit
 	std::set<std::pair<g::weight_t, g::vertex_t>> queue;
-
+	
+	std::printf("%s\n", "Insert the source for the firstime");
 	queue.insert(std::make_pair(distances[source], source));
 	
 	while(!queue.empty()) {
@@ -89,19 +93,23 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 			break;
 		}
 
-		const std::vector<g::neighbor> neighbors = adjmap.find(v_begin)->second;
+		const std::vector<g::neighbor> neighbors = graph.find(v_begin)->second;
+		
+		std::printf("Size of the neighbor : %ld\n", neighbors.size());
 
 		for(auto& n : neighbors) {
 			g::vertex_t v_end = n.target;
 			g::weight_t w_end = n.weight;
 			g::weight_t distance = distances[v_begin] + w_end;
+			
+			std::printf("Distance : %f, From Here : %f\n",
+					distance, distances[v_end]);
 
 			if(distance < distances[v_end]) {
 				queue.erase(std::make_pair(distances[v_end], v_end));
 				distances[v_end] = distance;
 				previous[v_end] = v_begin;
 				queue.insert(std::make_pair(distances[v_end], v_end));
-
 			}
 		}
 	}
