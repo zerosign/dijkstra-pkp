@@ -8,7 +8,12 @@
 
 namespace io {
 
-	extern "C++" struct reader;
+	class reader {
+		public:
+			reader();
+			static void read(const char*, g::adjmap&);
+			static void write(const char*, std::string);
+	};
 };
 
 #endif

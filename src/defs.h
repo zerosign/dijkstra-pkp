@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <limits>
+#include <list>
 
 namespace g {
 
@@ -24,11 +25,18 @@ namespace g {
 		}
 	};
 
+	typedef std::map<vertex_t, weight_t> edges;
+	typedef std::map<vertex_t, vertex_t> relations;
+	typedef std::list<vertex_t> path;
+
 	typedef std::map<vertex_t, 
-			  std::vector<neighbor> >  adjmap_t;
+			  std::vector<neighbor> > adjmap;
 	
+	typedef std::pair<vertex_t, 
+			  std::vector<neighbor> > adjmap_it;
+
 	template <typename vertex_type>
-		void to_string(std::vector<vertex_type>&, 
+		void to_string(g::path&, 
 			std::string&);
 };
 

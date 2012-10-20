@@ -8,3 +8,7 @@ test
 data
 *.o
 *.gch
+error.log
+playground
+samples 
+*.data

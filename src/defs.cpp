@@ -12,7 +12,7 @@ namespace g {
 
 
 	template <typename vertex_type>
-		void to_string(std::vector<vertex_type>& results,
+		void to_string(g::path& results,
 				std::string& str_out) {
 
 	}
