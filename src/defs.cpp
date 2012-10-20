@@ -11,8 +11,8 @@ namespace g {
 		std::numeric_limits<float>::max();
 
 
-	template <typename vertex_type>
-		void to_string(g::path& results,
+
+	void to_string(path& results,
 				std::string& str_out) {
 
 	}

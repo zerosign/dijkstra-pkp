@@ -31,21 +31,23 @@ int main(int argc, char ** argv) {
 	
 	io::reader::read(filename, graph);
 
-
 	g::vertex_t source, target;
 
 	source = std::atoi(argv[2]);
 	target = std::atoi(argv[3]);
-
+	
+	std::printf("Source : %d\n", source);
+	std::printf("Target : %d\n", target);
+	
 	dijkstra_sp_cpu(source, target, graph, 
-			distances, previous);
+		distances, previous);
+
 
 	dijkstra_sp_cpu_result(source, previous, result);
 
 	std::string result_str;
-
-	//to_string(result, result_str);
-
+	
+	g::to_string(result, result_str);
 	std::printf("\n\n[RESULT]\n\n%s\n\n", result_str.c_str());
 	/**/
 	return 0;
@@ -58,15 +60,18 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 		g::edges &distances,
 		g::relations &previous) {
 
+	
 	for(auto& it : adjmap) {
 		g::vertex_t v = it.first;
 		distances[v] = g::MAX_WEIGHT; // init as max value
 		for(auto& n : it.second) {
 			g::vertex_t v_target = n.target;
 			distances[v_target] = g::MAX_WEIGHT; 
+			std::printf("Target : %d\n", v_target);
 		}
 	}
-
+	
+	
 	distances[source] = 0; // init the distance from source
 							 // to source XD
 	
@@ -100,7 +105,7 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 			}
 		}
 	}
-
+	
 }
 
 void dijkstra_sp_cpu_result(

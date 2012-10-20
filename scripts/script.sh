@@ -17,6 +17,12 @@ fi
 
 if [ $2 == 'test' ]
 then
-	echo "Test Over 100 Samples.."
+	echo "Test Over 15 Samples.."
+	for ii in {1..15}
+	do
+		echo "Testing over "$((2**${ii}))" vertices"
+		echo $1 $3/sample_$((2**${ii})).data 0 $((2**${ii}))
+		./$1 $3/sample_$((2**${ii})).data 0 $((2**${ii}))
+	done
 	#TEST()
 fi

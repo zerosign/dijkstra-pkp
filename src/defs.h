@@ -35,8 +35,7 @@ namespace g {
 	typedef std::pair<vertex_t, 
 			  std::vector<neighbor> > adjmap_it;
 
-	template <typename vertex_type>
-		void to_string(g::path&, 
+	void to_string(g::path&, 
 			std::string&);
 };
 

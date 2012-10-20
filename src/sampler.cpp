@@ -5,6 +5,8 @@
 #include <ios>
 #include <sstream>
 
+#define BUFFSIZE 100
+
 float randomize(int start, int range);
 
 int main(int argc, char ** argv) {
@@ -19,16 +21,18 @@ int main(int argc, char ** argv) {
 	}
 
 	std::ofstream out(std::string(argv[1]).c_str());
+	
 	int N = std::atoi(argv[2]);
 	int start_weight = std::atoi(argv[3]);
 	int range_weight = std::atoi(argv[4]);
+	
+	char * buffer = new char[BUFFSIZE];
 
-	std::stringstream sstream (std::stringstream::in | 
-			std::stringstream::out);
+	int size = std::snprintf( buffer, BUFFSIZE, "%d\t%d\n", N, ((N-1) * N ));
 
-	sstream << N  << "\t" << ((N-1) * N )<< "\n";
-
-	out << sstream.rdbuf();
+	out.write(buffer, size);
+	
+	out.flush();
 
 	for(int ii = 0; ii < N; ii++) {
 		for(int jj = 0; jj < N; jj++) {
@@ -37,14 +41,21 @@ int main(int argc, char ** argv) {
 			if(ii == jj) continue;
 			
 			float value = randomize(start_weight, range_weight); 
-			
-			sstream << ii << "\t" << jj << "\t" << value << "\n";
+			int size = std::snprintf( buffer, BUFFSIZE, "%d\t%d\t%f\n", ii, jj, value);
+
+			out.write(buffer, size);
+	
+
+
+			//sstream << ii << "\t" << jj << "\t" << value << "\n";
 			
 		}
-		// write every N loop
-		out << sstream.rdbuf();
-	}
 
+		out.flush();
+		// write every N loop
+		//out << sstream.rdbuf();
+	}
+	
 	out.close();
 
 	return 0;
