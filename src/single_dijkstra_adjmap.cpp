@@ -105,6 +105,7 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 			std::printf("Distance : %f, From Here : %f\n",
 					distance, distances[v_end]);
 
+
 			if(distance < distances[v_end]) {
 				queue.erase(std::make_pair(distances[v_end], v_end));
 				distances[v_end] = distance;
