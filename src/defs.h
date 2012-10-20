@@ -37,8 +37,7 @@ namespace g {
 	typedef std::pair<vertex_t, 
 			  std::vector<neighbor> > adjmap_it;
 
-	void to_string(g::path&, 
-			std::string&);
+	std::string to_string(g::path&);
 };
 
 #endif // defs.h

@@ -9,11 +9,13 @@ namespace g {
 	const int MAX_WEIGHT = 
 		std::numeric_limits<int>::max();
 
-	void to_string(path& results,
-				std::string& str_out) {
-		for(auto &p : results) {
-			str_out.append(p + " ");
+	std::string to_string(path& results) {
+		std::string out = "";
+		for(vertex_t p : results) {
+			//std::printf("%d\t", p);
+			out += "\t" + p;
 		}
+		//std::printf("%s\n", str_out.c_str());
 	}
 
 };

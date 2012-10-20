@@ -34,8 +34,8 @@ sample : sampler
 	#$((`echo Helloworld`)
 	exec $(SCRIPTS_FOLDER)/script.sh $(BIN_FOLDER)/sampler generate $(SAMPLES_FOLDER)
 
-test : firsttime sample single_dijkstra_adjmap
-	exec $(SCRIPTS_FOLDER)/script.sh $(BIN_FOLDER)/singlpe_dijkstra_adjmap test $(OUT_FOLDER)
+test : firsttime single_dijkstra_adjmap
+	exec $(SCRIPTS_FOLDER)/script.sh $(BIN_FOLDER)/single_dijkstra_adjmap test $(SAMPLES_FOLDER) $(OUT_FOLDER)
 
 clean : 
 	rm -rf $(OBJ_FOLDER) $(BIN_FOLDER) $(SAMPLES_FOLDER) 

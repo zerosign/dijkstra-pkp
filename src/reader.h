@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <ios>
-#include <sstream>
+#include <cstdlib>
 #include "defs.h"
 
 namespace io {

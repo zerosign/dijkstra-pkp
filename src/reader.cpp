@@ -12,6 +12,11 @@ namespace io {
 		
 		std::ifstream input(std::string(filename).c_str());
 		
+		if(!input.good()) {
+			std::fprintf(stderr, "[ERROR] No such file %s\n", 
+					std::string(filename).c_str());
+			exit(EXIT_FAILURE);
+		}
 		char * buffer = new char[BUFFSIZE];
 
 		input.getline(buffer, BUFFSIZE);
@@ -22,7 +27,7 @@ namespace io {
 				&num_edges);
 
 	
-		std::printf("V : %d, E : %d\n", num_vertices, num_edges);
+	//	std::printf("V : %d, E : %d\n", num_vertices, num_edges);
 
 		//sstream >> num_vertices >> num_edges;
 		

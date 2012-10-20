@@ -22,7 +22,7 @@ then
 	do
 		echo "Testing over "$((2**${ii}))" vertices"
 		echo $1 $3/sample_$((2**${ii})).data 0 $((2**${ii}))
-		./$1 $3/sample_$((2**${ii})).data 0 $((2**${ii}))
+		./$1 $3/sample_$((2**${ii})).data 0 $((2**${ii})) >> out_$((2**${ii})).out
 	done
 	#TEST()
 fi
