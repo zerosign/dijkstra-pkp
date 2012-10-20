@@ -1,5 +1,0 @@
-./src/reader.cpp: In static member function ‘static void io::reader::read(const char*, g::adjmap&)’:
-./src/reader.cpp:21:7: warning: unused variable ‘num_vertices’ [-Wunused-variable]
-./src/reader.cpp:30:52: warning: ‘end’ may be used uninitialized in this function [-Wuninitialized]
-./src/reader.cpp:30:52: warning: ‘weight’ may be used uninitialized in this function [-Wuninitialized]
-./src/reader.cpp:2:3: warning: ‘num_edges’ may be used uninitialized in this function [-Wuninitialized]
