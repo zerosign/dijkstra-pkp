@@ -7,7 +7,7 @@ namespace g {
 	
 	// define the MAX WEIGHT
 	const int MAX_WEIGHT = 
-		std::numeric_limits<float>::max();
+		std::numeric_limits<int>::max();
 
 	void to_string(path& results,
 				std::string& str_out) {

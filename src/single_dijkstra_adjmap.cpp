@@ -42,14 +42,21 @@ int main(int argc, char ** argv) {
 	dijkstra_sp_cpu(source, target, graph, 
 		distances, previous);
 
-	dijkstra_sp_cpu_result(source, previous, result);
 
+	std::printf("Sizeof relations : %ld\n", previous.size());
+
+	for(auto & p : previous) {
+		std::printf("Relation :  %d -> %d\n", p.first, p.second);
+	}
+
+	dijkstra_sp_cpu_result(source, previous, result);
+	
 	std::string result_str;
 	
 	g::to_string(result, result_str);
 	
 	std::printf("\n\n[RESULT]\n\n%s\n\n", result_str.c_str());
-	/**/
+	
 	return 0;
 }
 
@@ -109,14 +116,12 @@ void dijkstra_sp_cpu(g::vertex_t& source,
 			g::vertex_t v_end = n.target;
 			g::weight_t w_end = n.weight;
 
-			std::printf("From source [%d], to target [%d], weight : %f\n", 
-				v_begin, v_end, w_end);
-
 			g::weight_t distance = distances[v_begin] + w_end;
+			std::printf("Distance v_begin : %f\n" , distances[v_begin]);
+			std::printf("w_end : %f\n" , w_end);
+			std::printf("Distance v_end : %f\n" , distances[v_end]);
+			std::printf("Distance : %f\n" , distance);
 			
-			std::printf("Distance : %f, From Here : %f\n",
-					distance, distances[v_end]);
-
 			if(distance < distances[v_end]) {
 				queue.erase(std::make_pair(distances[v_end], v_end));
 				distances[v_end] = distance;
