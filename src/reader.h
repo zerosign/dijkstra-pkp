@@ -8,10 +8,12 @@
 
 namespace io {
 
-	class reader {
+	class file {
 		public:
-			reader();
+			file();
 			static void read(const char*, g::adjmap&);
+			static void read(const char*, float *,
+				float *);
 			static void write(const char*, std::string);
 	};
 };

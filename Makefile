@@ -3,7 +3,7 @@ BIN_FOLDER = './bin'
 OBJ_FOLDER = './objects'
 SAMPLES_FOLDER = './samples'
 SCRIPTS_FOLDER = './scripts'
-CXXFLAGS = -std=c++11
+CXXFLAGS = -std=c++0x
 
 all : sampler single_dijkstra_adjmap
 	
