@@ -1,9 +1,7 @@
 #include <cstdio>
 #include <cuda.h>
 #include "defs.h"
-#include "reader.h"
-
-
+#include "file.h"
 
 
 __device__ int index() {
