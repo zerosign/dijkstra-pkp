@@ -33,6 +33,7 @@ int main(int argc, char ** argv) {
 	if(argc != 4) {
 		std::fprintf(stderr, "\n[Usage] : %s [filename] [start] [end] [outfile]\n", 
 			std::string(argv[0]).c_str());
+		exit(EXIT_FAILURE);
 	}
 
 	const char * filename = argv[1];
