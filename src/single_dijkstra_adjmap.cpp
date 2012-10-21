@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include "defs.h"
-#include "reader.h"
+#include "file.h"
 #include <memory>
 #include <set>
 #include <vector>
@@ -32,7 +32,7 @@ int main(int argc, char ** argv) {
 	g::adjmap graph;
 
 	
-	io::reader::read(filename, graph);
+	io::file::read(filename, graph);
 
 	g::vertex_t source, target;
 
