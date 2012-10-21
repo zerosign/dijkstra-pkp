@@ -69,7 +69,7 @@ namespace io {
 		std::sscanf(buffer, "%d\t%d\n", &num_vertices,
 				&num_edges);
 
-		VertexArray = (float*)malloc(sizeof(float)*num_vertices);	
+		VertexArray = (int*)malloc(sizeof(int)*num_vertices);	
 		WeightArray = (float*)malloc(sizeof(float)*(num_vertices*num_vertices));
 		
 		for(int ii = 0; ii < num_vertices; ii++) {
