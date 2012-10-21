@@ -12,3 +12,4 @@ error.log
 playground
 samples 
 *.data
+*.orig

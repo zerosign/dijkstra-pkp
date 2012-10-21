@@ -19,17 +19,20 @@ __device__ int y(int index) {
 
 __global__ void first_cuda_ssp_kernel() {
 	
-}
+}	
 
 __global__ void second_cuda_ssp_kernel() {
-
+	
 }
 
+<<<<<<< HEAD
+=======
 /**
 void AdjMapToMatrix(g::adjmap & graph, 
 	float * VertexArray,
 	float * WeightArray);
 **/
+>>>>>>> origin/zerosign
 
 int main(int argc, char ** argv) {
 	
@@ -46,11 +49,17 @@ int main(int argc, char ** argv) {
 
 	int * VertexArray, * EdgeArray, * MaskArray;
 	float * WeightArray, * CostArray, * UpdateCostArray;
+<<<<<<< HEAD
+	bool * MaskArray;
+
+	cudaEvent_t start, stop;
+=======
 	
 	VertexArray = malloc(sizeof(
 
 	AdjMapToMatrix(graph, VertexArray, WeightArray);
 
+>>>>>>> origin/zerosign
 
 	return 0;
 }
