@@ -90,8 +90,8 @@ int main(int argc, char ** argv) {
 	cudaMemcpy(UpdateCostArrayDevice, UpdateCostArrayHost,
 			size, cudaMemcpyHostToDevice);
 
-
 	while(true) {
+	
 	}
 
 	return 0;
