@@ -13,7 +13,7 @@ namespace io {
 			file();
 			static void read(const char*, g::adjmap&);
 			static void read(const char*, int&,
-					float *, float *);
+					int *, float *);
 			static void write(const char*, std::string);
 	};
 };
