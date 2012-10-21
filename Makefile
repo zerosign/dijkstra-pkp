@@ -22,10 +22,11 @@ file.o : firsttime defs.o
 sampler : firsttime
 	g++ $(SRC_FOLDER)/sampler.cpp -o $(BIN_FOLDER)/sampler -Wall -g -O0 $(CXXFLAGS)
 
+
+
 single_dijkstra_adjmap : firsttime defs.o file.o
 	g++ $(SRC_FOLDER)/single_dijkstra_adjmap.cpp $(OBJ_FOLDER)/defs.o $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/single_dijkstra_adjmap -Wall -g -O0 $(CXXFLAGS)
-
-	#nvcc parallel_dijkstra.cu -o parallel_dijkstra -Wall
+	nvcc $(SRC_FOLDER)/parallel_dijkstra.cu $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/parallel_dijkstra -Wall -O0 $(CXXFLAGS)
 	#g++ single_dijkstra_adjmat.cpp -o single_dijkstra_adjmat -Wall -g -O0
 
 
