@@ -12,8 +12,8 @@ namespace io {
 		public:
 			file();
 			static void read(const char*, g::adjmap&);
-			static void read(const char*, float *,
-				float *);
+			static void read(const char*, int&,
+					float *, float *);
 			static void write(const char*, std::string);
 	};
 };
