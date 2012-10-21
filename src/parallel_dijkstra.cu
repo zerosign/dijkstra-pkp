@@ -57,13 +57,13 @@ __global__ void second_cuda_ssp_kernel(float * VertexArray,
 }
 
 bool is_empty(int * MaskArrayHost, int size) {
-	bool empty = true;
+	bool not_empty = false;
 	for(int ii = 0; ii < size; ii++) {
-		empty &= (MaskArrayHost[ii] != 0) ? (true) : (false);
-		if(!empty)
+		not_empty |= (MaskArrayHost[ii] == 1) ? (true) : (false);
+		if(not_empty)
 			return false;
 	}
-	return empty;
+	return !not_empty;
 }
 
 int main(int argc, char ** argv) {
@@ -87,8 +87,8 @@ int main(int argc, char ** argv) {
 
 	//g::reader::read(std::string(filename).c_str(), graph);
 
-	int * VertexArrayHost, * VertexArrayDevice,
-		 * EdgeArray, * MaskArray;
+	int * VertexArrayHost, * VertexArrayDevice, 
+		 * MaskArrayHost, * MaskArrayDevice;
 
 	float * WeightArrayHost, * WeightArrayDevice,
 			* CostArrayHost, * CostArrayDevice, 
@@ -103,8 +103,7 @@ int main(int argc, char ** argv) {
 	blockDim.x = vertexSize;
 
 	CostArrayHost = (float*)malloc(vertexSize * sizeof(float));
-	UpdateCostArrayHost = (float*)malloc(vertexSize * sizeof(float));
-	
+	UpdateCostArrayHost = (float*)malloc(vertexSize * sizeof(float));	
 	
 	for(int ii = 0; ii < vertexSize; ii++) {
 		CostArrayHost[ii] = std::numeric_limits<int>::max();
@@ -135,7 +134,6 @@ int main(int argc, char ** argv) {
 	
 	cudaMemcpy(UpdateCostArrayDevice, UpdateCostArrayHost,
 			size, cudaMemcpyHostToDevice);
-
 
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {

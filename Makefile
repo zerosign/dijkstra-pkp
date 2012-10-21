@@ -23,9 +23,11 @@ sampler : firsttime
 	g++ $(SRC_FOLDER)/sampler.cpp -o $(BIN_FOLDER)/sampler -Wall -g -O0 $(CXXFLAGS)
 
 
-
 single_dijkstra_adjmap : firsttime defs.o file.o
 	g++ $(SRC_FOLDER)/single_dijkstra_adjmap.cpp $(OBJ_FOLDER)/defs.o $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/single_dijkstra_adjmap -Wall -g -O0 $(CXXFLAGS)
+	
+
+parallel_dijkstra : firsttime file.o
 	nvcc $(SRC_FOLDER)/parallel_dijkstra.cu $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/parallel_dijkstra 
 	#g++ single_dijkstra_adjmat.cpp -o single_dijkstra_adjmat -Wall -g -O0
 
@@ -35,7 +37,7 @@ sample : sampler
 	#$((`echo Helloworld`)
 	exec $(SCRIPTS_FOLDER)/script.sh $(BIN_FOLDER)/sampler generate $(SAMPLES_FOLDER)
 
-test : firsttime single_dijkstra_adjmap
+test : firsttime single_dijkstra_adjmap 
 	exec $(SCRIPTS_FOLDER)/script.sh $(BIN_FOLDER)/single_dijkstra_adjmap test $(SAMPLES_FOLDER) $(OUT_FOLDER)
 
 clean : 

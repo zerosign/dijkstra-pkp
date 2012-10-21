@@ -1,0 +1,18 @@
+[SUCCED] Target Founded.
+Path : 
+0->2047->end
+IO Read Time 3.37e+06
+SEARCH Time 4.6e+06
+SEARCH backtrack Time 0
+[SUCCED] Target Founded.
+Path : 
+0->2047->end
+IO Read Time 3.37e+06
+SEARCH Time 4.61e+06
+SEARCH backtrack Time 0
+[SUCCED] Target Founded.
+Path : 
+0->86->88->139->116->71->118->21->112->166->108->20->2->167->2047->end
+IO Read Time 3.48e+06
+SEARCH Time 4.6e+06
+SEARCH backtrack Time 0

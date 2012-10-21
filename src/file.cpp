@@ -3,7 +3,6 @@
 #define BUFFSIZE 100
 
 namespace io {
-	
 				
 	file::file() {}
 		

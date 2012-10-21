@@ -9,6 +9,8 @@
 #include <iterator>
 #include <sstream>
 
+
+
 void dijkstra_sp_cpu(g::vertex_t&, g::vertex_t&,
 		const g::adjmap&, g::edges&,
 		g::relations&);
@@ -31,8 +33,11 @@ int main(int argc, char ** argv) {
 	g::path result;
 	g::adjmap graph;
 
+	clock_t read_begin = clock();	
 	
 	io::file::read(filename, graph);
+	
+	clock_t read_end = clock();
 
 	g::vertex_t source, target;
 
@@ -49,17 +54,25 @@ int main(int argc, char ** argv) {
 	}
 	**/
 
+	clock_t search_begin = clock();
+
 	dijkstra_sp_cpu(source, target, graph, 
 		distances, previous);
-
+	
+	clock_t search_end = clock();
 
 	// std::printf("Sizeof relations : %ld\n", previous.size());
 
 	/**/
 
 	/**/
+
+	clock_t search_result_begin = clock();
+
 	dijkstra_sp_cpu_result(target, previous, result);
 	
+	clock_t search_result_end = clock();
+
 	//std::string out = g::to_string(result);
 	
 	std::stringstream sstream(std::stringstream::in |
@@ -76,6 +89,9 @@ int main(int argc, char ** argv) {
 	
 	std::cout << "Path : \n" << out << "end" << std::endl;
 
+	std::cout << "IO Read Time " << ((double) (double)read_end - (double)read_begin) << std::endl;
+	std::cout << "SEARCH Time " << ((double) search_end - search_begin) << std::endl;
+	std::cout << "SEARCH backtrack Time " << ((double) search_result_end - search_result_begin) << std::endl;
 	//std::cout << out;
 	//std::printf("\n\n[RESULT]\n\n%s\n\n", out.c_str());
 	/**/
