@@ -26,7 +26,7 @@ sampler : firsttime
 
 single_dijkstra_adjmap : firsttime defs.o file.o
 	g++ $(SRC_FOLDER)/single_dijkstra_adjmap.cpp $(OBJ_FOLDER)/defs.o $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/single_dijkstra_adjmap -Wall -g -O0 $(CXXFLAGS)
-	nvcc $(SRC_FOLDER)/parallel_dijkstra.cu $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/parallel_dijkstra -O0 $(CXXFLAGS)
+	nvcc $(SRC_FOLDER)/parallel_dijkstra.cu $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/parallel_dijkstra -O0 --compiler-options $(CXXFLAGS)
 	#g++ single_dijkstra_adjmat.cpp -o single_dijkstra_adjmat -Wall -g -O0
 
 
