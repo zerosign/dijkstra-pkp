@@ -54,13 +54,13 @@ int main(int argc, char ** argv) {
 			* CostArrayHost, * CostArrayDevice, 
 			* UpdateCostArrayHost, * UpdateCostArrayDevice;
 
-	int vertexSize;
+	int vertexSize = 1;
 
-	io::file::read(std::string(filename).c_str(), vertexSize,
+	io::file::read(filename, vertexSize,
 			VertexArrayHost, WeightArrayHost);
 
-	CostArrayHost = (float*)malloc(vertexSize);
-	UpdateCostArrayHost = (float*)malloc(vertexSize);
+	CostArrayHost = (float*)malloc(vertexSize * sizeof(float));
+	UpdateCostArrayHost = (float*)malloc(vertexSize * sizeof(float));
 	
 	
 	for(int ii = 0; ii < vertexSize; ii++) {
@@ -69,13 +69,13 @@ int main(int argc, char ** argv) {
 	}
 
 	
-	cudaMalloc((void**)&VertexArrayDevice, vertexSize);
-	cudaMalloc((void**)&WeightArrayDevice, vertexSize * vertexSize);
-	cudaMalloc((void**)&CostArrayDevice, vertexSize);
-	cudaMalloc((void**)&UpdateCostArrayDevice, vertexSize);
+	cudaMalloc((void**)&VertexArrayDevice, vertexSize * sizeof(float));
+	cudaMalloc((void**)&WeightArrayDevice, vertexSize * vertexSize * sizeof(float) * sizeof(float));
+	cudaMalloc((void**)&CostArrayDevice, vertexSize * sizeof(float));
+	cudaMalloc((void**)&UpdateCostArrayDevice, vertexSize * sizeof(float));
 	
 	// malloc default set it to zero (we call this as a false)
-	cudaMalloc((void**)&MaskArray, vertexSize);
+	cudaMalloc((void**)&MaskArray, vertexSize * sizeof(float));
 	
 	/**
 	MaskArrayHost[start] = 1;
