@@ -17,16 +17,54 @@ __device__ int y(int index) {
 }
 
 __global__ void first_cuda_ssp_kernel(float * VertexArray,
-		float * EdgeArray, float * WeightArray,
-		float * MaskArray, float * CostArray, 
+		float * WeightArray, float * MaskArray, float * CostArray, 
 		float * UpdateCostArray) {
 	
+	int id = index();
+	
+	if(MaskArray[id] == 1) {
+		MaskArray[id] = 0;
+		
+		int vertex = x(index);
+		int neighborSize = y(N);
+
+		for(int ii = 0; ii < neighborSize; ii++) {
+			
+			if(y(id) == ii) 
+				continue;
+
+			int nid = index * neighborSize + ii;
+			
+			if(UpdateCostArray[nid] > CostArray[id] + WeightArray[nid]) {
+				UpdateCostArray[nid] = CostArray[id] + WeightArray[nid];
+			}
+		}
+
+	}
+
 }	
 
-__global__ void second_cuda_ssp_kernel() {
-	
+__global__ void second_cuda_ssp_kernel(float * VertexArray,
+		float * WeightArray, float * MaskArray, float * CostArray,
+		float * UpdateCostArray) {
+	int id = index();
+
+	if(CostArray[id] > UpdateCostArray[id]) {
+		CostArray[id] = UpdateCostArray[id];
+		MaskArray[id] = 1;
+	}
+	UpdateCostArray[id] = CostArray[id];
 }
 
+bool is_empty(int * MaskArrayHost, int size) {
+	bool empty = true;
+	for(int ii = 0; ii < size; ii++) {
+		empty &= (MaskArrayHost[ii] != 0) ? (true) : (false);
+		if(!empty)
+			return false;
+	}
+	return empty;
+}
 
 int main(int argc, char ** argv) {
 	
@@ -43,6 +81,8 @@ int main(int argc, char ** argv) {
 	start = std::atoi(argv[2]);
 	end = std::atoi(argv[3]);
 
+
+	dim3 gridDim, blockDim;
 	//g::adjmap graph;
 
 	//g::reader::read(std::string(filename).c_str(), graph);
@@ -58,6 +98,9 @@ int main(int argc, char ** argv) {
 
 	io::file::read(filename, vertexSize,
 			VertexArrayHost, WeightArrayHost);
+
+	gridDim.x = vertexSize;
+	blockDim.x = vertexSize;
 
 	CostArrayHost = (float*)malloc(vertexSize * sizeof(float));
 	UpdateCostArrayHost = (float*)malloc(vertexSize * sizeof(float));
@@ -77,7 +120,6 @@ int main(int argc, char ** argv) {
 	// malloc default set it to zero (we call this as a false)
 	cudaMalloc((void**)&MaskArray, vertexSize * sizeof(float));
 	
-	/**
 	MaskArrayHost[start] = 1;
 	CostArrayHost[start] = 0;
 	UpdateCostArrayHost[start] = 0;
@@ -94,10 +136,24 @@ int main(int argc, char ** argv) {
 	cudaMemcpy(UpdateCostArrayDevice, UpdateCostArrayHost,
 			size, cudaMemcpyHostToDevice);
 
-	while(true) {
-	
+
+	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
+		for(int ii = 0; ii < vertexSize; ii++) {
+			
+			first_cuda_ssp_kernel<<<gridDim, blockDim >>>(VertexArrayDevice, 
+					WeightArrayDevice, MaskArrayDevice, CostArrayDevice,
+					UpdateCostArrayDevice);
+
+			second_cuda_ssp_kernel<<<gridDim, blockDim >>>(VertexArrayDevice,
+					WeightArrayDevice, MaskArrayDevice, CostArrayDevice,
+					UpdateCostArrayDevice);
+		}
+
+		// update the masks
+		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
+				size, cudaMemcpyDeviceToHost);
 	}
-	**/
+
 	return 0;
 }
 
