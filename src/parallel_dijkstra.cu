@@ -55,11 +55,11 @@ int main(int argc, char ** argv) {
 
 	int vertexSize;
 
-	io::file::read(std::string(filename).c_str(), vertexSize
+	io::file::read(std::string(filename).c_str(), vertexSize,
 			VertexArrayHost, WeightArrayHost);
 
-	CostArrayHost = (int*)malloc(vertexSize);
-	UpdateCostArrayHost = (int*)malloc(vertexSize);
+	CostArrayHost = (float*)malloc(vertexSize);
+	UpdateCostArrayHost = (float*)malloc(vertexSize);
 	
 	
 	for(int ii = 0; ii < vertexSize; ii++) {
