@@ -9,12 +9,11 @@ __device__ int thread_id() {
 
 __global__ void first_cuda_ssp_kernel() {
 	
-}
+}	
 
 __global__ void second_cuda_ssp_kernel() {
-
+	
 }
-
 
 
 int main(int argc, char ** argv) {
@@ -29,7 +28,7 @@ int main(int argc, char ** argv) {
 	float * WeightArray, * CostArray, * UpdateCostArray;
 	bool * MaskArray;
 
-	
+	cudaEvent_t start, stop;
 
 	return 0;
 }
