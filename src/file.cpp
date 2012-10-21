@@ -50,7 +50,7 @@ namespace io {
 		input.close();
 	}
 
-	void file::read(const char * filename, 
+	void file::read(const char * filename, int & vertexSize,
 			float * VertexArray, float * WeightArray) {
 			
 		std::ifstream input(std::string(filename).c_str());
