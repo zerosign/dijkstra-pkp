@@ -51,7 +51,7 @@ namespace io {
 	}
 
 	void file::read(const char * filename, int & vertexSize,
-			int * VertexArray, float * WeightArray) {
+			int *& VertexArray, float *& WeightArray) {
 			
 		std::ifstream input(std::string(filename).c_str());
 		
