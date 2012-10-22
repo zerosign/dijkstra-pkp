@@ -148,6 +148,8 @@ int main(int argc, char ** argv) {
 	// If it's smaller than CostArray then it's switched
 	UpdateCostArrayHost = (float*)malloc(rawVertexSize);	
 	
+	MaskArrayHost = (int*)malloc(rawVertexSize);
+
 	for(int ii = 0; ii < vertexSize; ii++) {
 		CostArrayHost[ii] = std::numeric_limits<int>::max();
 		UpdateCostArrayHost[ii] = std::numeric_limits<int>::max();
