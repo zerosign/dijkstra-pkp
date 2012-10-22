@@ -102,38 +102,40 @@ int main(int argc, char ** argv) {
 	gridDim.x = vertexSize;
 	blockDim.x = vertexSize;
 
-	CostArrayHost = (float*)malloc(vertexSize * sizeof(float));
-	UpdateCostArrayHost = (float*)malloc(vertexSize * sizeof(float));	
+	const int rawVertexSize = vertexSize * sizeof(float);
+	const int rawMatrixSize = rawVertexSize * rawVertexSize;
+
+	CostArrayHost = (float*)malloc(rawVertexSize);
+	UpdateCostArrayHost = (float*)malloc(rawVertexSize);	
 	
 	for(int ii = 0; ii < vertexSize; ii++) {
 		CostArrayHost[ii] = std::numeric_limits<int>::max();
 		UpdateCostArrayHost[ii] = std::numeric_limits<int>::max();
 	}
-
 	
-	cudaMalloc((void**)&VertexArrayDevice, vertexSize * sizeof(float));
-	cudaMalloc((void**)&WeightArrayDevice, vertexSize * vertexSize * sizeof(float) * sizeof(float));
-	cudaMalloc((void**)&CostArrayDevice, vertexSize * sizeof(float));
-	cudaMalloc((void**)&UpdateCostArrayDevice, vertexSize * sizeof(float));
+	cudaMalloc((void**)&VertexArrayDevice, rawVertexSize);
+	cudaMalloc((void**)&WeightArrayDevice, rawMatrixSize);
+	cudaMalloc((void**)&CostArrayDevice, rawVertexSize);
+	cudaMalloc((void**)&UpdateCostArrayDevice, rawVertexSize);
 	
 	// malloc default set it to zero (we call this as a false)
-	cudaMalloc((void**)&MaskArray, vertexSize * sizeof(float));
+	cudaMalloc((void**)&MaskArrayDevice, rawVertexSize);
 	
 	MaskArrayHost[start] = 1;
 	CostArrayHost[start] = 0;
 	UpdateCostArrayHost[start] = 0;
 
 	cudaMemcpy(VertexArrayDevice, VertexArrayHost, 
-			size, cudaMemcpyHostToDevice);
+			rawVertexSize, cudaMemcpyHostToDevice);
 	
 	cudaMemcpy(WeightArrayDevice, WeightArrayHost,
-			size, cudaMemcpyHostToDevice);
+			rawMatrixSize, cudaMemcpyHostToDevice);
 
 	cudaMemcpy(CostArrayDevice, CostArrayHost,
-			size, cudaMemcpyHostToDevice);
+			rawVertexSize, cudaMemcpyHostToDevice);
 	
 	cudaMemcpy(UpdateCostArrayDevice, UpdateCostArrayHost,
-			size, cudaMemcpyHostToDevice);
+			rawVertexSize, cudaMemcpyHostToDevice);
 
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
@@ -149,7 +151,7 @@ int main(int argc, char ** argv) {
 
 		// update the masks
 		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
-				size, cudaMemcpyDeviceToHost);
+				rawVertexSize, cudaMemcpyDeviceToHost);
 	}
 
 	return 0;
