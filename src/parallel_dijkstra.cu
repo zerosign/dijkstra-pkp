@@ -45,6 +45,7 @@ __global__ void second_cuda_ssp_kernel(float * WeightArray,
 		MaskArray[threadIdx.x] = 1;
 		//VertexArray[blockIdx.x] = threadIdx.x;
 	}
+	MaskArray[blockIdx.x] = 1;
 	UpdateCostArray[threadIdx.x] = CostArray[blockIdx.x];
 }
 
