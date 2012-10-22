@@ -219,6 +219,11 @@ int main(int argc, char ** argv) {
 			std::printf("Mask [%d] : %s\n", ii, (MaskArrayHost[ii] == 1) ? 
 					("true") : ("false"));
 		}
+			
+		
+		for(int ii = 0 ; ii < vertexSize; ii++) {
+			std::printf("Cost [%d] : %f\n", ii, CostArrayHost[ii]);
+		}
 
 		// find minimum of each vertex
 		int index = find_min_index(CostArrayHost, vertexSize);
