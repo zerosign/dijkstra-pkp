@@ -195,6 +195,8 @@ int main(int argc, char ** argv) {
 	std::vector<int> path;
 	float finalCost = 0;
 	
+	int counter = 0;
+
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
 			
@@ -217,6 +219,8 @@ int main(int argc, char ** argv) {
 		int index = find_min_index(CostArrayHost, vertexSize);
 		path.push_back(index);
 		finalCost += CostArrayHost[index];
+	
+		std::printf("Counter : %d\n", ++counter);
 	}
 	
 	
