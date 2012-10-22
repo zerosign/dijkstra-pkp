@@ -25,7 +25,7 @@ __global__ void first_cuda_ssp_kernel(int * VertexArray,
 	if(MaskArray[id] == 1) {
 		MaskArray[id] = 0;
 		
-		int vertex = x(index);
+		int vertex = x(id);
 		int neighborSize = y(blockDim.x);
 
 		for(int ii = 0; ii < neighborSize; ii++) {
@@ -33,7 +33,7 @@ __global__ void first_cuda_ssp_kernel(int * VertexArray,
 			if(y(id) == ii) 
 				continue;
 
-			int nid = index * neighborSize + ii;
+			int nid = id * neighborSize + ii;
 			
 			if(UpdateCostArray[nid] > CostArray[id] + WeightArray[nid]) {
 				UpdateCostArray[nid] = CostArray[id] + WeightArray[nid];
