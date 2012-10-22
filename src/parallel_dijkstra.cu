@@ -8,7 +8,6 @@
 #include "defs.h"
 #include "file.h"
 
-/**
 __device__ int index() {
 	return blockIdx.x * blockDim.x + threadIdx.x;
 }
@@ -63,7 +62,6 @@ __global__ void second_cuda_ssp_kernel(int * VertexArray,
 	}
 	UpdateCostArray[id] = CostArray[id];
 }
-**/
 
 bool is_empty(int * MaskArrayHost, int size) {
 	bool not_empty = false;
