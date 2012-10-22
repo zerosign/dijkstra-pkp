@@ -94,7 +94,7 @@ int main(int argc, char ** argv) {
 	end = std::atoi(argv[3]);
 
 
-	//dim3 gridDim, blockDim;
+	dim3 gridDim, blockDim;
 	//g::adjmap graph;
 
 	//g::reader::read(std::string(filename).c_str(), graph);
@@ -121,8 +121,8 @@ int main(int argc, char ** argv) {
 
 
 	// RAW copy from vertex matrix to block
-	//gridDim.x = vertexSize;
-	//blockDim.x = vertexSize;
+	gridDim.x = vertexSize;
+	blockDim.x = vertexSize;
 	
 	/**
 	for(int ii = 0; ii < vertexSize; ii++) {
