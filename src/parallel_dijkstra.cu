@@ -18,15 +18,15 @@ __global__ void first_cuda_ssp_kernel(float * WeightArray,
 	
 	//int id = index();
 	
-	if(MaskArray[threadIdx.x] == 1) {
-		MaskArray[threadIdx.x] = 0;
+	if(MaskArray[blockIdx.x] == 1) {
+		MaskArray[blockIdx.x] = 0;
 
 		for(int ii = 0; ii < blockDim.x; ii++) {
 			
 			if(threadIdx.x == ii) 
 				continue;
 			
-			if(UpdateCostArray[threadIdx.x] < CostArray[threadIdx.x] + WeightArray[index()]) {
+			if(UpdateCostArray[threadIdx.x] > CostArray[threadIdx.x] + WeightArray[index()]) {
 				UpdateCostArray[threadIdx.x] = CostArray[threadIdx.x] + WeightArray[index()];
 			}
 		}
@@ -42,10 +42,9 @@ __global__ void second_cuda_ssp_kernel(float * WeightArray,
 	// Update the cost array
 	if(CostArray[blockIdx.x] > UpdateCostArray[threadIdx.x]) {
 		CostArray[blockIdx.x] = UpdateCostArray[threadIdx.x];
-		MaskArray[threadIdx.x] = 1;
+		MaskArray[blockIdx.x] = 1;
 		//VertexArray[blockIdx.x] = threadIdx.x;
 	}
-	MaskArray[blockIdx.x] = 1;
 	UpdateCostArray[threadIdx.x] = CostArray[blockIdx.x];
 }
 
@@ -153,7 +152,8 @@ int main(int argc, char ** argv) {
 	MaskArrayHost = (int*)malloc(rawVertexSize);
 
 	for(int ii = 0; ii < vertexSize; ii++) {
-		CostArrayHost[ii] = std::numeric_limits<int>::max();
+		CostArrayHost[ii] = 0;
+			//std::numeric_limits<int>::max();
 		UpdateCostArrayHost[ii] = std::numeric_limits<int>::max();
 	}
 	
