@@ -124,14 +124,14 @@ int main(int argc, char ** argv) {
 	gridDim.x = vertexSize;
 	blockDim.x = vertexSize;
 	
-	/**
+	
 	for(int ii = 0; ii < vertexSize; ii++) {
 		for(int jj = 0; jj < vertexSize; jj++) {
 			std::printf("%f ", WeightArrayHost[ii * vertexSize + jj]);
 		}
 		std::printf("\n");
 	}
-	**/
+	/**/
 
 	const int rawVertexSize = vertexSize * sizeof(float);
 	const int rawMatrixSize = rawVertexSize * rawVertexSize;
@@ -195,14 +195,14 @@ int main(int argc, char ** argv) {
 	int counter = 0;
 
 	while(!is_empty(MaskArrayHost, vertexSize)) {
-		for(int ii = 0; ii < vertexSize; ii++) {
+		//for(int ii = 0; ii < vertexSize; ii++) {
 			
 			first_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice,
 					MaskArrayDevice, CostArrayDevice, UpdateCostArrayDevice);
 
 			second_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice, 
 					MaskArrayDevice, CostArrayDevice, UpdateCostArrayDevice);
-		}
+		//}
 
 		// update the masks
 		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
