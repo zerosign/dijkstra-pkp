@@ -8,7 +8,13 @@
 #include <iostream>
 #include <iterator>
 #include <sstream>
+#include <sys/time.h>
+#include <ctime>
 
+
+double get_time(struct timeval start, struct timeval stop) {
+	return (stop.tv_sec - start.tv_sec)*1000000 + stop.tv_usec - start.tv_usec;
+}
 
 
 void dijkstra_sp_cpu(g::vertex_t&, g::vertex_t&,
@@ -21,6 +27,8 @@ void dijkstra_sp_cpu_result(
 
 int main(int argc, char ** argv) {
 	
+	
+
 	if(argc != 4) {
 		std::printf("%s [graph_file] [start] [end] [outfile]\n", argv[0]);
 		exit(EXIT_FAILURE);
@@ -33,11 +41,14 @@ int main(int argc, char ** argv) {
 	g::path result;
 	g::adjmap graph;
 
-	clock_t read_begin = clock();	
-	
+	struct timeval read_begin;
+	gettimeofday(&read_begin, NULL);
+
 	io::file::read(filename, graph);
 	
-	clock_t read_end = clock();
+	struct timeval read_end;
+	gettimeofday(&read_end, NULL);
+
 
 	g::vertex_t source, target;
 
@@ -54,12 +65,14 @@ int main(int argc, char ** argv) {
 	}
 	**/
 
-	clock_t search_begin = clock();
+	struct timeval search_begin;
+	gettimeofday(&search_begin, NULL);
 
 	dijkstra_sp_cpu(source, target, graph, 
 		distances, previous);
 	
-	clock_t search_end = clock();
+	struct timeval search_end;
+	gettimeofday(&search_end, NULL);
 
 	// std::printf("Sizeof relations : %ld\n", previous.size());
 
@@ -67,11 +80,14 @@ int main(int argc, char ** argv) {
 
 	/**/
 
-	clock_t search_result_begin = clock();
+	struct timeval search_result_begin;
+	gettimeofday(&search_result_begin, NULL);
 
 	dijkstra_sp_cpu_result(target, previous, result);
 	
-	clock_t search_result_end = clock();
+	struct timeval search_result_end;
+	gettimeofday(&search_result_end, NULL);
+
 
 	//std::string out = g::to_string(result);
 	
@@ -89,9 +105,9 @@ int main(int argc, char ** argv) {
 	
 	std::cout << "Path : \n" << out << "end" << std::endl;
 
-	std::cout << "IO Read Time " << ((double) (double)read_end - (double)read_begin) << std::endl;
-	std::cout << "SEARCH Time " << ((double) search_end - search_begin) << std::endl;
-	std::cout << "SEARCH backtrack Time " << ((double) search_result_end - search_result_begin) << std::endl;
+	std::cout << "IO Read Time " << ((double) get_time(read_begin, read_end)) << std::endl;
+	std::cout << "SEARCH Time " << ((double) get_time(search_begin, search_end)) << std::endl;
+	std::cout << "SEARCH backtrack Time " << ((double) get_time(search_result_begin, search_result_end)) << std::endl;
 	//std::cout << out;
 	//std::printf("\n\n[RESULT]\n\n%s\n\n", out.c_str());
 	/**/

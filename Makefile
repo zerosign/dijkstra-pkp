@@ -2,6 +2,7 @@ SRC_FOLDER = './src'
 BIN_FOLDER = './bin'
 OBJ_FOLDER = './objects'
 SAMPLES_FOLDER = './samples'
+OUT_FOLDER = './out'
 SCRIPTS_FOLDER = './scripts'
 CXXFLAGS = -std=c++0x
 
@@ -12,6 +13,7 @@ firsttime :
 	mkdir -p $(OBJ_FOLDER)
 	mkdir -p $(BIN_FOLDER)
 	mkdir -p $(SAMPLES_FOLDER)
+	mkdir -p $(OUT_FOLDER)
 
 defs.o : firsttime
 	g++ -c $(SRC_FOLDER)/defs.cpp -o $(OBJ_FOLDER)/defs.o -Wall -g -O0 $(CXXFLAGS)

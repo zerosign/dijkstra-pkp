@@ -1,6 +1,6 @@
 [SUCCED] Target Founded.
 Path : 
-0->86->127->15->157->21->139->1023->end
-IO Read Time 820000
-SEARCH Time 1.09e+06
-SEARCH backtrack Time 0
+0->7->387->162->104->22->89->10->161->109->156->196->74->219->192->150->1023->end
+IO Read Time 810011
+SEARCH Time 1.10009e+06
+SEARCH backtrack Time 19
