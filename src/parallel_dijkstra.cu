@@ -105,14 +105,29 @@ int main(int argc, char ** argv) {
 			* CostArrayHost, * CostArrayDevice, 
 			* UpdateCostArrayHost, * UpdateCostArrayDevice;
 
-	int vertexSize = 1;
+	int vertexSize = 0;
 
 	io::file::read(filename, vertexSize,
 			VertexArrayHost, WeightArrayHost);
 
+	if(vertexSize < 2) {
+		std::fprintf(stderr, "\n[ERROR] Anomaly in VertexSize\n");
+		exit(EXIT_FAILURE);
+	}
+
+
+	// RAW copy from vertex matrix to block
 	gridDim.x = vertexSize;
 	blockDim.x = vertexSize;
+	
+	for(int ii = 0; ii < vertexSize; ii++) {
+		for(int jj = 0; jj < vertexSize; jj++) {
+			std::printf("%f ", WeightArrayHost[ii * vertexSize + jj]);
+		}
+		std::printf("\n");
+	}
 
+	/**
 	const int rawVertexSize = vertexSize * sizeof(float);
 	const int rawMatrixSize = rawVertexSize * rawVertexSize;
 
@@ -157,7 +172,14 @@ int main(int argc, char ** argv) {
 	cudaMemcpy(UpdateCostArrayDevice, UpdateCostArrayHost,
 			rawVertexSize, cudaMemcpyHostToDevice);
 	
-	/**
+	// freeing big memory that not been used
+	// anymore because already copied to device
+	free(UpdateCostArrayHost);
+	free(WeightArrayHost);
+	free(VertexArrayHost);
+	free(CudaArrayHost);
+
+	
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
 			
@@ -174,8 +196,11 @@ int main(int argc, char ** argv) {
 		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
 				rawVertexSize, cudaMemcpyDeviceToHost);
 	}
-	**/
+	
 
+	cudaMemcpy(CostArrayHost, CostArrayDevice, rawVertexSize, 
+			cudaMemcpyDeviceToHost);
+	**/
 	return 0;
 }
 
