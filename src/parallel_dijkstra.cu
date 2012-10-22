@@ -115,8 +115,7 @@ int main(int argc, char ** argv) {
 	int vertexSize = 0;
 
 
-	io::file::read(filename, vertexSize,
-			VertexArrayHost, WeightArrayHost);
+	io::file::read(filename, vertexSize, WeightArrayHost);
 
 	if(vertexSize < 2) {
 		std::fprintf(stderr, "\n[ERROR] Anomaly in VertexSize\n");
