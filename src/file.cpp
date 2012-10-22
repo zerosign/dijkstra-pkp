@@ -50,7 +50,7 @@ namespace io {
 	}
 
 	void file::read(const char * filename, int & vertexSize,
-			int *& VertexArray, float *& WeightArray) {
+		float *& WeightArray) {
 			
 		std::ifstream input(std::string(filename).c_str());
 		
@@ -70,12 +70,12 @@ namespace io {
 
 		vertexSize = num_vertices;
 
-		VertexArray = (int*)malloc(sizeof(int)*num_vertices);	
+		//VertexArray = (int*)malloc(sizeof(int)*num_vertices);	
 		WeightArray = (float*)malloc(sizeof(float)*(num_vertices*num_vertices));
 		
-		for(int ii = 0; ii < num_vertices; ii++) {
-			VertexArray[ii] = ii;
-		}
+		//for(int ii = 0; ii < num_vertices; ii++) {
+		//	VertexArray[ii] = ii;
+		//}
 
 		for(int ii = 0; ii < num_edges; ii++) {
 			int start, end;

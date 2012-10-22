@@ -1,5 +1,5 @@
 #include <cstdio>
-//#include <cuda.h>
+#include <cuda.h>
 #include <cstdlib>
 #include <list>
 #include <sstream>
@@ -12,55 +12,43 @@ __device__ int index() {
 	return blockIdx.x * blockDim.x + threadIdx.x;
 }
 
-__device__ int x(int index) {
-	return index;
-}
-
-__device__ int y(int index) {
-	return index;
-}
-
 __global__ void first_cuda_ssp_kernel(int * VertexArray,
 		float * WeightArray, int * MaskArray, float * CostArray, 
 		float * UpdateCostArray) {
 	
-	int id = index();
+	//int id = index();
 	
-	if(MaskArray[id] == 1) {
-		MaskArray[id] = 0;
+	if(MaskArray[blockIdx.x] == 1) {
+		MaskArray[blockIdx.x] = 0;
 		
-		int vertex = x(id);
-		int neighborSize = y(blockDim.x);
+		//int vertex = threadIdx.x;
+		//int neighborSize = blockDim.x;
 
-		for(int ii = 0; ii < neighborSize; ii++) {
+		for(int ii = 0; ii < blockDim.x; ii++) {
 			
-			if(y(id) == ii) 
+			if(threadIdx.x == ii) 
 				continue;
-
-			int nid = id * neighborSize + ii;
 			
-			if(UpdateCostArray[nid] > CostArray[id] + WeightArray[nid]) {
-				UpdateCostArray[nid] = CostArray[id] + WeightArray[nid];
+			if(UpdateCostArray[threadIdx.x] > CostArray[threadIdx.x] + WeightArray[index()]) {
+				UpdateCostArray[threadIdx.x] = CostArray[threadIdx.x] + WeightArray[index()];
 			}
 		}
 
 	}
-
 }	
-
 
 
 __global__ void second_cuda_ssp_kernel(int * VertexArray,
 		float * WeightArray, int * MaskArray, float * CostArray,
 		float * UpdateCostArray) {
-	int id = index();
 
 	// Update the cost array
-	if(CostArray[id] > UpdateCostArray[id]) {
-		CostArray[id] = UpdateCostArray[id];
-		MaskArray[id] = 1;
+	if(CostArray[threadIdx.x] > UpdateCostArray[threadIdx.x]) {
+		CostArray[threadIdx.x] = UpdateCostArray[threadIdx.x];
+		MaskArray[threadIdx.x] = 1;
+		VertexArray[blockIdx.x] = threadIdx.x;
 	}
-	UpdateCostArray[id] = CostArray[id];
+	UpdateCostArray[threadIdx.x] = CostArray[threadIdx.x];
 }
 
 bool is_empty(int * MaskArrayHost, int size) {
@@ -77,6 +65,22 @@ std::list<int> get_shortest_path(float * CostArray,
 		const int source, const int target,
 		const int vertexSize,
 		int & finalCost);
+
+int find_min_index(float * Cost, int N) {
+	int index = -1;
+	int value = std::numeric_limits<int>::max();
+	for(int ii = 0; ii < N; ii++) {
+		if(value > Cost[ii]) {
+			index = ii;
+			value = Cost[ii];
+		}
+	}
+	if(index == -1){
+		std::fprintf(stderr, "[Error] Error nggak jelas\n");
+		exit(EXIT_FAILURE);
+	}
+	return index;
+}
 
 int main(int argc, char ** argv) {
 	
@@ -100,16 +104,16 @@ int main(int argc, char ** argv) {
 	//g::reader::read(std::string(filename).c_str(), graph);
 
 
-	// untuk VertexArray sizenya adalah size of vertex
 	// untuk MaskArray sizenya adalah size of vertex (dilihat dari distance yang ingin diubah)
-	int * VertexArrayHost, * VertexArrayDevice, 
-		 * MaskArrayHost, * MaskArrayDevice;
+	//int * VertexArrayHost, * VertexArrayDevice, 
+	int * MaskArrayHost, * MaskArrayDevice;
 
 	float * WeightArrayHost, * WeightArrayDevice,
 			* CostArrayHost, * CostArrayDevice, 
 			* UpdateCostArrayHost, * UpdateCostArrayDevice;
 
 	int vertexSize = 0;
+
 
 	io::file::read(filename, vertexSize,
 			VertexArrayHost, WeightArrayHost);
@@ -147,6 +151,8 @@ int main(int argc, char ** argv) {
 	// If it's smaller than CostArray then it's switched
 	UpdateCostArrayHost = (float*)malloc(rawVertexSize);	
 	
+	//VertexArrayHost = (float*) malloc(rawVertexSize);
+
 	MaskArrayHost = (int*)malloc(rawVertexSize);
 
 	for(int ii = 0; ii < vertexSize; ii++) {
@@ -154,7 +160,7 @@ int main(int argc, char ** argv) {
 		UpdateCostArrayHost[ii] = std::numeric_limits<int>::max();
 	}
 	
-	cudaMalloc((void**)&VertexArrayDevice, rawVertexSize);
+	//cudaMalloc((void**)&VertexArrayDevice, rawVertexSize);
 	cudaMalloc((void**)&WeightArrayDevice, rawMatrixSize);
 	cudaMalloc((void**)&CostArrayDevice, rawVertexSize);
 	cudaMalloc((void**)&UpdateCostArrayDevice, rawVertexSize);
@@ -166,10 +172,11 @@ int main(int argc, char ** argv) {
 	MaskArrayHost[start] = 1;
 	CostArrayHost[start] = 0;
 	UpdateCostArrayHost[start] = 0;
+	//VertexArrayHost[0] = start;
 
 
-	cudaMemcpy(VertexArrayDevice, VertexArrayHost, 
-			rawVertexSize, cudaMemcpyHostToDevice);
+	//cudaMemcpy(VertexArrayDevice, VertexArrayHost, 
+	//		rawVertexSize, cudaMemcpyHostToDevice);
 	
 	cudaMemcpy(WeightArrayDevice, WeightArrayHost,
 			rawMatrixSize, cudaMemcpyHostToDevice);
@@ -184,9 +191,10 @@ int main(int argc, char ** argv) {
 	// anymore because already copied to device
 	free(UpdateCostArrayHost);
 	free(WeightArrayHost);
-	free(VertexArrayHost);
+	//free(VertexArrayHost);
 	
-	
+	std::vector<int> path;
+	float finalCost = 0;
 	
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
@@ -203,22 +211,23 @@ int main(int argc, char ** argv) {
 		// update the masks
 		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
 				rawVertexSize, cudaMemcpyDeviceToHost);
+		
+		// get the cost of the current vertex
+		cudaMemcpy(CostArrayHost, CostArrayDevice,
+				rawVertexSize, cudaMemcpyDeviceToHost);
+
+		// find minimum of each vertex
+		int index = find_min_index(CostArrayHost, vertexSize);
+		path.push_back(index);
+		finalCost += CostArrayHost[index];
 	}
 	
 	
-	cudaMemcpy(CostArrayHost, CostArrayDevice, rawVertexSize, 
-			cudaMemcpyDeviceToHost);
-	
-	
-	int finalCost = 0;
-
-	std::list<int> result = get_shortest_path(CostArrayHost, 
-			start, end, vertexSize, finalCost);
 
 	std::stringstream sstream(std::stringstream::in |
 			std::stringstream::out);
 
-	std::copy(result.begin(), result.end(), 
+	std::copy(path.begin(), path.end(), 
 			std::ostream_iterator<g::vertex_t>(sstream, "->"));	
 	
 	std::string out;
@@ -227,6 +236,7 @@ int main(int argc, char ** argv) {
 	//	sstream >> out;
 	out = sstream.str();
 	
+	std::cout << "Cost : \n" << finalCost << std::endl;
 	std::cout << "Path : \n" << out << "end" << std::endl;
 	
 	return 0;
@@ -236,6 +246,7 @@ int main(int argc, char ** argv) {
 std::list<int> get_shortest_path(float * CostArray, 
 		const int source, const int target,
 		const int vertexSize, int & finalCost) {
+	
 	std::list<int> result;
 	
 	
