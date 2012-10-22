@@ -14,3 +14,4 @@ samples
 *.data
 *.orig
 *.out
+out

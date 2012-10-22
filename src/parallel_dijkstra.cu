@@ -16,8 +16,8 @@ __device__ int y(int index) {
 	return index;
 }
 
-__global__ void first_cuda_ssp_kernel(float * VertexArray,
-		float * WeightArray, float * MaskArray, float * CostArray, 
+__global__ void first_cuda_ssp_kernel(int * VertexArray,
+		float * WeightArray, int * MaskArray, float * CostArray, 
 		float * UpdateCostArray) {
 	
 	int id = index();
@@ -26,7 +26,7 @@ __global__ void first_cuda_ssp_kernel(float * VertexArray,
 		MaskArray[id] = 0;
 		
 		int vertex = x(index);
-		int neighborSize = y(N);
+		int neighborSize = y(blockDim.x);
 
 		for(int ii = 0; ii < neighborSize; ii++) {
 			
@@ -44,8 +44,8 @@ __global__ void first_cuda_ssp_kernel(float * VertexArray,
 
 }	
 
-__global__ void second_cuda_ssp_kernel(float * VertexArray,
-		float * WeightArray, float * MaskArray, float * CostArray,
+__global__ void second_cuda_ssp_kernel(int * VertexArray,
+		float * WeightArray, int * MaskArray, float * CostArray,
 		float * UpdateCostArray) {
 	int id = index();
 

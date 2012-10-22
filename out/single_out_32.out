@@ -1,17 +1,5 @@
 [SUCCED] Target Founded.
 Path : 
-0->14->4->8->13->10->30->7->27->31->end
-IO Read Time 0
-SEARCH Time 0
-SEARCH backtrack Time 0
-[SUCCED] Target Founded.
-Path : 
-0->14->4->8->13->10->30->7->27->31->end
-IO Read Time 0
-SEARCH Time 0
-SEARCH backtrack Time 0
-[SUCCED] Target Founded.
-Path : 
 0->15->29->21->31->end
 IO Read Time 0
 SEARCH Time 0
