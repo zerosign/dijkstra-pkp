@@ -12,8 +12,8 @@ __device__ int index() {
 	return blockIdx.x * blockDim.x + threadIdx.x;
 }
 
-__global__ void first_cuda_ssp_kernel(int * VertexArray,
-		float * WeightArray, int * MaskArray, float * CostArray, 
+__global__ void first_cuda_ssp_kernel(float * WeightArray, 
+		int * MaskArray, float * CostArray, 
 		float * UpdateCostArray) {
 	
 	//int id = index();
@@ -38,8 +38,8 @@ __global__ void first_cuda_ssp_kernel(int * VertexArray,
 }	
 
 
-__global__ void second_cuda_ssp_kernel(int * VertexArray,
-		float * WeightArray, int * MaskArray, float * CostArray,
+__global__ void second_cuda_ssp_kernel(float * WeightArray,
+		int * MaskArray, float * CostArray, 
 		float * UpdateCostArray) {
 
 	// Update the cost array
@@ -198,13 +198,11 @@ int main(int argc, char ** argv) {
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
 			
-			first_cuda_ssp_kernel<<<gridDim, blockDim >>>(VertexArrayDevice, 
-					WeightArrayDevice, MaskArrayDevice, CostArrayDevice,
-					UpdateCostArrayDevice);
+			first_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice,
+					MaskArrayDevice, CostArrayDevice, UpdateCostArrayDevice);
 
-			second_cuda_ssp_kernel<<<gridDim, blockDim >>>(VertexArrayDevice,
-					WeightArrayDevice, MaskArrayDevice, CostArrayDevice,
-					UpdateCostArrayDevice);
+			second_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice, 
+					MaskArrayDevice, CostArrayDevice, UpdateCostArrayDevice);
 		}
 
 		// update the masks
