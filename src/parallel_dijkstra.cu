@@ -120,14 +120,15 @@ int main(int argc, char ** argv) {
 	gridDim.x = vertexSize;
 	blockDim.x = vertexSize;
 	
+	/**
 	for(int ii = 0; ii < vertexSize; ii++) {
 		for(int jj = 0; jj < vertexSize; jj++) {
 			std::printf("%f ", WeightArrayHost[ii * vertexSize + jj]);
 		}
 		std::printf("\n");
 	}
+	**/
 
-	/**
 	const int rawVertexSize = vertexSize * sizeof(float);
 	const int rawMatrixSize = rawVertexSize * rawVertexSize;
 
@@ -177,8 +178,9 @@ int main(int argc, char ** argv) {
 	free(UpdateCostArrayHost);
 	free(WeightArrayHost);
 	free(VertexArrayHost);
-	free(CudaArrayHost);
-
+	free(CostArrayHost);
+	
+	/**
 	
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
@@ -197,10 +199,9 @@ int main(int argc, char ** argv) {
 				rawVertexSize, cudaMemcpyDeviceToHost);
 	}
 	
-
+	**/
 	cudaMemcpy(CostArrayHost, CostArrayDevice, rawVertexSize, 
 			cudaMemcpyDeviceToHost);
-	**/
 	return 0;
 }
 
