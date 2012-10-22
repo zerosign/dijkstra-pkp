@@ -5,6 +5,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <list>
 #include <iostream>
 #include <iterator>
 #include <sstream>

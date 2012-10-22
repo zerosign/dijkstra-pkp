@@ -1,5 +1,9 @@
 #include <cstdio>
 #include <cuda.h>
+#include <cstdlib>
+#include <list>
+#include <sstream>
+#include <iterator>
 #include "defs.h"
 #include "file.h"
 
@@ -178,7 +182,6 @@ int main(int argc, char ** argv) {
 	free(UpdateCostArrayHost);
 	free(WeightArrayHost);
 	free(VertexArrayHost);
-	free(CostArrayHost);
 	
 	/**
 	
@@ -202,6 +205,26 @@ int main(int argc, char ** argv) {
 	**/
 	cudaMemcpy(CostArrayHost, CostArrayDevice, rawVertexSize, 
 			cudaMemcpyDeviceToHost);
+	
+	int finalCost = 0;
+
+	std::list<int> result = get_shortest_path(CostArrayHost, 
+			start, end, vertexSize, finalCost);
+
+	std::stringstream sstream(std::stringstream::in |
+			std::stringstream::out);
+
+	std::copy(result.begin(), result.end(), 
+			std::ostream_iterator<g::vertex_t>(sstream, "->"));	
+	
+	std::string out;
+
+	//while(!sstream.eof()) 
+	//	sstream >> out;
+	out = sstream.str();
+	
+	std::cout << "Path : \n" << out << "end" << std::endl;
+
 	return 0;
 }
 
@@ -210,5 +233,7 @@ std::list<int> get_shortest_path(float * CostArray,
 		const int source, const int target,
 		const int vertexSize, int & finalCost) {
 	std::list<int> result;
+	
+	
 
 }
