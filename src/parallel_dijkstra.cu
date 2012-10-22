@@ -20,9 +20,6 @@ __global__ void first_cuda_ssp_kernel(float * WeightArray,
 	
 	if(MaskArray[blockIdx.x] == 1) {
 		MaskArray[blockIdx.x] = 0;
-		
-		//int vertex = threadIdx.x;
-		//int neighborSize = blockDim.x;
 
 		for(int ii = 0; ii < blockDim.x; ii++) {
 			
@@ -43,12 +40,12 @@ __global__ void second_cuda_ssp_kernel(float * WeightArray,
 		float * UpdateCostArray) {
 
 	// Update the cost array
-	if(CostArray[threadIdx.x] > UpdateCostArray[threadIdx.x]) {
-		CostArray[threadIdx.x] = UpdateCostArray[threadIdx.x];
+	if(CostArray[blockIdx.x] > UpdateCostArray[threadIdx.x]) {
+		CostArray[blockIdx.x] = UpdateCostArray[threadIdx.x];
 		MaskArray[threadIdx.x] = 1;
 		//VertexArray[blockIdx.x] = threadIdx.x;
 	}
-	UpdateCostArray[threadIdx.x] = CostArray[threadIdx.x];
+	UpdateCostArray[threadIdx.x] = CostArray[blockIdx.x];
 }
 
 bool is_empty(int * MaskArrayHost, int size) {
