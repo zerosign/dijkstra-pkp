@@ -44,11 +44,14 @@ __global__ void first_cuda_ssp_kernel(int * VertexArray,
 
 }	
 
+
+
 __global__ void second_cuda_ssp_kernel(int * VertexArray,
 		float * WeightArray, int * MaskArray, float * CostArray,
 		float * UpdateCostArray) {
 	int id = index();
 
+	// Update the cost array
 	if(CostArray[id] > UpdateCostArray[id]) {
 		CostArray[id] = UpdateCostArray[id];
 		MaskArray[id] = 1;
@@ -65,6 +68,11 @@ bool is_empty(int * MaskArrayHost, int size) {
 	}
 	return !not_empty;
 }
+
+std::list<int> get_shortest_path(float * CostArray, 
+		const int source, const int target,
+		const int vertexSize,
+		int & finalCost);
 
 int main(int argc, char ** argv) {
 	
@@ -87,6 +95,9 @@ int main(int argc, char ** argv) {
 
 	//g::reader::read(std::string(filename).c_str(), graph);
 
+
+	// untuk VertexArray sizenya adalah size of vertex
+	// untuk MaskArray sizenya adalah size of vertex (dilihat dari distance yang ingin diubah)
 	int * VertexArrayHost, * VertexArrayDevice, 
 		 * MaskArrayHost, * MaskArrayDevice;
 
@@ -105,7 +116,15 @@ int main(int argc, char ** argv) {
 	const int rawVertexSize = vertexSize * sizeof(float);
 	const int rawMatrixSize = rawVertexSize * rawVertexSize;
 
+	// Cost array is used for counting
+	// cost of given source to target
 	CostArrayHost = (float*)malloc(rawVertexSize);
+
+	// temporary cost array for counting 
+	// cost from the previous vertex to current 
+	// vertex
+	// 
+	// If it's smaller than CostArray then it's switched
 	UpdateCostArrayHost = (float*)malloc(rawVertexSize);	
 	
 	for(int ii = 0; ii < vertexSize; ii++) {
@@ -118,7 +137,8 @@ int main(int argc, char ** argv) {
 	cudaMalloc((void**)&CostArrayDevice, rawVertexSize);
 	cudaMalloc((void**)&UpdateCostArrayDevice, rawVertexSize);
 	
-	// malloc default set it to zero (we call this as a false)
+	// MaskArray is used for determining that the vertex
+	// is already been visited or not
 	cudaMalloc((void**)&MaskArrayDevice, rawVertexSize);
 	
 	MaskArrayHost[start] = 1;
@@ -136,7 +156,8 @@ int main(int argc, char ** argv) {
 	
 	cudaMemcpy(UpdateCostArrayDevice, UpdateCostArrayHost,
 			rawVertexSize, cudaMemcpyHostToDevice);
-
+	
+	/**
 	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
 			
@@ -153,8 +174,15 @@ int main(int argc, char ** argv) {
 		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
 				rawVertexSize, cudaMemcpyDeviceToHost);
 	}
+	**/
 
 	return 0;
 }
 
 
+std::list<int> get_shortest_path(float * CostArray, 
+		const int source, const int target,
+		const int vertexSize, int & finalCost) {
+	std::list<int> result;
+
+}
