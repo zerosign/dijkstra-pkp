@@ -89,6 +89,7 @@ namespace io {
 					&end, &weight);
 
 			WeightArray[start * num_vertices + end ] = weight;
+			WeightArray[end * num_vertices + start] = weight;
 		}
 
 	
