@@ -33,6 +33,9 @@ parallel_dijkstra : firsttime file.o
 	nvcc $(SRC_FOLDER)/parallel_dijkstra.cu $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/parallel_dijkstra 
 	#g++ single_dijkstra_adjmat.cpp -o single_dijkstra_adjmat -Wall -g -O0
 
+parallel_dijkstra_test : firsttime file.o
+	cp $(SRC_FOLDER)/parallel_dijkstra.cu $(SRC_FOLDER)/parallel_dijkstra.cpp
+	g++ $(SRC_FOLDER)/parallel_dijkstra.cpp $(OBJ_FOLDER)/file.o -o $(BIN_FOLDER)/parallel_dijkstra_test -O0 -g
 
 sample : sampler
 	#$((`for ii in {1..200}; do touch $(SAMPLES_FOLDER)/sample_${ii}.data ${ii} 0 100;  done`))
