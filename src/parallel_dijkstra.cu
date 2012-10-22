@@ -197,7 +197,7 @@ int main(int argc, char ** argv) {
 	
 	int counter = 0;
 
-	while(!is_empty(MaskArrayHost, vertexSize * vertexSize)) {
+	while(!is_empty(MaskArrayHost, vertexSize)) {
 		for(int ii = 0; ii < vertexSize; ii++) {
 			
 			first_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice,
@@ -205,6 +205,7 @@ int main(int argc, char ** argv) {
 
 			second_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice, 
 					MaskArrayDevice, CostArrayDevice, UpdateCostArrayDevice);
+		}
 
 		// update the masks
 		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
@@ -214,14 +215,17 @@ int main(int argc, char ** argv) {
 		cudaMemcpy(CostArrayHost, CostArrayDevice,
 				rawVertexSize, cudaMemcpyDeviceToHost);
 
+		for(int ii = 0 ; ii < vertexSize; ii++) {
+			std::printf("Mask [%d] : %s\n", ii, (MaskArrayHost[ii] == 1) ? 
+					("true") : ("false"));
+		}
+
 		// find minimum of each vertex
 		int index = find_min_index(CostArrayHost, vertexSize);
 		path.push_back(index);
 		finalCost += CostArrayHost[index];
 	
 		std::printf("Counter : %d\n", ++counter);
-		
-		}
 	}
 	
 	
@@ -230,7 +234,7 @@ int main(int argc, char ** argv) {
 			std::stringstream::out);
 
 	std::copy(path.begin(), path.end(), 
-			std::ostream_iterator<g::vertex_t>(sstream, "->"));	
+			std::ostream_iterator<int>(sstream, "->"));	
 	
 	std::string out;
 
