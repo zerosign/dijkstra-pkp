@@ -4,6 +4,7 @@
 #include <list>
 #include <sstream>
 #include <iterator>
+#include <iostream>
 #include "defs.h"
 #include "file.h"
 
