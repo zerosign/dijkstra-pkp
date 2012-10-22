@@ -18,6 +18,7 @@ __global__ void first_cuda_ssp_kernel(float * WeightArray,
 	
 	//int id = index();
 	
+
 	if(MaskArray[blockIdx.x] == 1) {
 		MaskArray[blockIdx.x] = 0;
 
@@ -26,8 +27,8 @@ __global__ void first_cuda_ssp_kernel(float * WeightArray,
 			if(threadIdx.x == ii) 
 				continue;
 			
-			if(UpdateCostArray[threadIdx.x] > CostArray[threadIdx.x] + WeightArray[index()]) {
-				UpdateCostArray[threadIdx.x] = CostArray[threadIdx.x] + WeightArray[index()];
+			if(UpdateCostArray[blockIdx.x] > CostArray[threadIdx.x] + WeightArray[index()]) {
+				UpdateCostArray[blockIdx.x] = CostArray[threadIdx.x] + WeightArray[index()];
 			}
 		}
 
@@ -196,14 +197,13 @@ int main(int argc, char ** argv) {
 	int counter = 0;
 
 	while(!is_empty(MaskArrayHost, vertexSize)) {
-		//for(int ii = 0; ii < vertexSize; ii++) {
+		for(int ii = 0; ii < vertexSize; ii++) {
 			
 			first_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice,
 					MaskArrayDevice, CostArrayDevice, UpdateCostArrayDevice);
 
 			second_cuda_ssp_kernel<<<gridDim, blockDim >>>(WeightArrayDevice, 
 					MaskArrayDevice, CostArrayDevice, UpdateCostArrayDevice);
-		//}
 
 		// update the masks
 		cudaMemcpy(MaskArrayHost, MaskArrayDevice, 
@@ -229,8 +229,9 @@ int main(int argc, char ** argv) {
 		finalCost += CostArrayHost[index];
 	
 		std::printf("Counter : %d\n", ++counter);
-	}
 	
+		}
+	}
 	
 
 	std::stringstream sstream(std::stringstream::in |
