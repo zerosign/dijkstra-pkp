@@ -153,7 +153,7 @@ int main(int argc, char ** argv) {
 	MaskArrayHost = (int*)malloc(rawVertexSize);
 
 	for(int ii = 0; ii < vertexSize; ii++) {
-		CostArrayHost[ii] = 0;
+		CostArrayHost[ii] = std::numeric_limits<int>::max();
 			//std::numeric_limits<int>::max();
 		UpdateCostArrayHost[ii] = std::numeric_limits<int>::max();
 	}
