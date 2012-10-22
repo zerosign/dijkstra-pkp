@@ -46,7 +46,7 @@ __global__ void second_cuda_ssp_kernel(float * WeightArray,
 	if(CostArray[threadIdx.x] > UpdateCostArray[threadIdx.x]) {
 		CostArray[threadIdx.x] = UpdateCostArray[threadIdx.x];
 		MaskArray[threadIdx.x] = 1;
-		VertexArray[blockIdx.x] = threadIdx.x;
+		//VertexArray[blockIdx.x] = threadIdx.x;
 	}
 	UpdateCostArray[threadIdx.x] = CostArray[threadIdx.x];
 }
