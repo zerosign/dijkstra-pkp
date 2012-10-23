@@ -27,7 +27,7 @@ __global__ void first_cuda_ssp_kernel(float * WeightArray,
 			if(threadIdx.x == ii) 
 				continue;
 			
-			if(UpdateCostArray[threadIdx.x] > CostArray[blockIdx.x] + WeightArray[index()]) {
+			if(UpdateCostArray[threadIdx.x] < CostArray[blockIdx.x] + WeightArray[index()]) {
 				UpdateCostArray[threadIdx.x] = CostArray[blockIdx.x] + WeightArray[index()];
 			}
 		}
@@ -153,8 +153,7 @@ int main(int argc, char ** argv) {
 	MaskArrayHost = (int*)malloc(rawVertexSize);
 
 	for(int ii = 0; ii < vertexSize; ii++) {
-		CostArrayHost[ii] = std::numeric_limits<int>::max();
-			//std::numeric_limits<int>::max();
+		CostArrayHost[ii] = 0;
 		UpdateCostArrayHost[ii] = std::numeric_limits<int>::max();
 	}
 	
@@ -231,7 +230,6 @@ int main(int argc, char ** argv) {
 	
 		std::printf("Counter : %d\n", ++counter);
 	}
-	
 	
 
 	std::stringstream sstream(std::stringstream::in |
